@@ -1,0 +1,105 @@
+import { generateSign } from '../utils/sign.js';
+import { config } from '../config/index.js';
+import type { RegisterRequest, RegisterResponse } from '../types/index.js';
+
+export const registerUser = async (
+  body: RegisterRequest,
+  headers: Record<string, string | string[] | undefined>
+): Promise<RegisterResponse | { error: string; status?: number }> => {
+  
+  // 1. ПОДГОТОВКА ДАННЫХ
+  
+  // Извлекаем IP (сначала ищем x-client-ip, потом x-forwarded-for, потом локальный)
+  const xClientIp = 
+    (headers['x-client-ip'] as string) || 
+    (headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || 
+    '127.0.0.1';
+
+  const xVisitorId = (headers['x-visitor-id'] as string) || '';
+  const cookie = (headers['cookie'] as string) || '';
+  const userAgent = (headers['user-agent'] as string) || 'AutoReg-TS/1.0';
+
+  let email = (body.email || '').trim().toLowerCase();
+
+  // --- ЛОГИРОВАНИЕ ВХОДЯЩЕГО ЗАПРОСА ---
+  console.log('\n--- [1] INCOMING REQUEST FROM CLIENT ---');
+  console.log('Headers (Selected):', JSON.stringify({
+    'x-client-ip': xClientIp,
+    'x-visitor-id': xVisitorId,
+    'cookie': cookie
+  }, null, 2));
+  console.log('Body:', JSON.stringify(body, null, 2));
+  // -------------------------------------
+
+  // Генерируем подпись на нашей стороне (безопаснее)
+  const sign = generateSign(config.partner.secret, config.partner.id, email);
+  
+  // Если нужно доверять подписи клиента (НЕ РЕКОМЕНДУЕТСЯ, если у вас свой ID), раскомментируйте:
+  // const sign = body.sign || generateSign(config.partner.secret, config.partner.id, email);
+
+  // Формируем тело для API Партнера (все по дефолту + email/sign)
+  const payload = {
+    id: config.partner.id,
+    sign: sign,
+    email: email,
+    country: config.defaults.country,  // VN
+    currency: config.defaults.currency, // USDT
+    send_reg_data: true,
+    vip: false,
+    is_remember_user: true,
+  };
+
+  // Формируем заголовки для API Партнера
+  const outgoingHeaders = {
+    'accept': 'application/json',
+    'content-type': 'application/json;charset=UTF-8',
+    'x-client-ip': xClientIp,
+    'x-visitor-id': xVisitorId,
+    'Cookie': cookie, 
+    'user-agent': userAgent,
+  };
+
+  // --- ЛОГИРОВАНИЕ ИСХОДЯЩЕГО ЗАПРОСА ---
+  console.log('--- [2] OUTGOING REQUEST TO PARTNER ---');
+  console.log('URL:', config.partner.apiUrl);
+  console.log('Headers:', JSON.stringify(outgoingHeaders, null, 2));
+  console.log('Payload:', JSON.stringify(payload, null, 2));
+  // -------------------------------------
+
+  try {
+    const res = await fetch(config.partner.apiUrl, {
+      method: 'POST',
+      headers: outgoingHeaders,
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    // --- ЛОГИРОВАНИЕ ОТВЕТА ---
+    console.log('--- [3] RESPONSE FROM PARTNER ---');
+    console.log('Status:', res.status);
+    console.log('Data:', JSON.stringify(data, null, 2));
+    console.log('-----------------------------------\n');
+    // --------------------------
+
+    if (res.ok && data.login) { // Проверка на успешную регистрацию
+      return {
+        success: true as const,
+        login: data.login,
+        password: data.password,
+        domain: data.domain,
+        autologin: `https://${data.domain}${data.deposit}`, // Обычно deposit ссылка используется для автологина
+        main: `https://${data.domain}${data.main}`,
+      };
+    }
+
+    return { 
+      error: data.message || 'Registration failed at partner side', 
+      status: res.status 
+    };
+
+  } catch (error: any) {
+    console.error('--- [ERROR] FETCH FAILED ---', error);
+    return { error: error.message || 'Internal Server Error', status: 500 };
+  }
+};

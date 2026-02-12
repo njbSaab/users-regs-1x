@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    /* ==================== Базовая структура проекта ==================== */
+    "rootDir": "./src",                  // Обязательно! Где лежат .ts файлы
+    "outDir": "./dist",                  // Обязательно! Куда компилировать .js
+
+    /* ==================== Target & Module (Node.js) ==================== */
+    "target": "ES2022",                   // esnext тоже ок, но ES2022 стабильнее и достаточно
+    "module": "NodeNext",                // Лучший выбор для Node.js ≥16
+    "moduleResolution": "NodeNext",      // Обязательно в паре с NodeNext
+
+    /* ==================== Типы и окружение ==================== */
+    "lib": ["ES2022"],                    // Достаточно для Node.js
+    "types": ["node"],                   // Автоматически подтянет @types/node
+
+    /* ==================== Вывод дополнительных файлов ==================== */
+    "sourceMap": true,                   // Полезно для дебага в проде
+    "declaration": false,                // Не нужен для backend (экономит время)
+    "declarationMap": false,             // Тоже не нужен без declaration
+
+    /* ==================== Строгая типизация ==================== */
+    "strict": true,                      // Включает все strict-флаги (рекомендую оставить)
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* ==================== Современные и важные флаги ==================== */
+    "verbatimModuleSyntax": true,        // Критически важно для NodeNext + ESM/CJS интеропа
+    "isolatedModules": true,             // Нужно для tsx и многих инструментов
+    "esModuleInterop": true,             // Упрощает импорт CommonJS модулей
+    "allowSyntheticDefaultImports": true, // Работает в паре с esModuleInterop
+    "resolveJsonModule": true,           // Если импортируешь .json файлы
+    "skipLibCheck": true,                // Ускоряет компиляцию
+    "forceConsistentCasingInFileNames": true,
+
+    /* ==================== Не нужны для backend ==================== */
+    "jsx": "react-jsx",                  // УДАЛИТЬ — это для React, у тебя backend!
+    "noUncheckedSideEffectImports": true // Можно оставить, но редко нужен
+  },
+
+  /* ==================== Какие файлы компилировать ==================== */
+  "include": [
+    "src/**/*"
+  ],
+
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

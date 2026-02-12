@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>Aviator</title>
+    <!-- fingerprintjs в <head> -->
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <!-- Meta -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta
+      name="msapplication-TileImage"
+      content="./img/favicons/mstile-144x144-1.png"
+    />
+    <meta
+      name="msapplication-config"
+      content="./img/favicons/browserconfig.xml"
+    />
+    <!-- Favicons -->
+    <link
+      rel="shortcut icon"
+      href="./img/favicons/favicon-48x48.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./img/favicons/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./img/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href="./img/favicons/favicon-48x48.png"
+    />
+    <!-- Apple Touch Icons -->
+    <link
+      rel="apple-touch-icon"
+      sizes="57x57"
+      href="./img/favicons/apple-touch-icon-57x57.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="60x60"
+      href="./img/favicons/apple-touch-icon-60x60.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="./img/favicons/apple-touch-icon-72x72.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="./img/favicons/apple-touch-icon-76x76.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="./img/favicons/apple-touch-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="./img/favicons/apple-touch-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="./img/favicons/apple-touch-icon-152x152.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="167x167"
+      href="./img/favicons/apple-touch-icon-167x167.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./img/favicons/apple-touch-icon-1024x1024.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="1024x1024"
+      href="./img/favicons/apple-touch-icon-1024x1024.png"
+    />
+
+    <!-- Android Icons -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="36x36"
+      href="./img/favicons/android-chrome-36x36.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="72x72"
+      href="./img/favicons/android-chrome-72x72.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="./img/favicons/android-chrome-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="144x144"
+      href="./img/favicons/android-chrome-144x144.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="./img/favicons/android-chrome-192x192.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="256x256"
+      href="./img/favicons/android-chrome-256x256.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="384x384"
+      href="./img/favicons/android-chrome-384x384.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="512x512"
+      href="./img/favicons/android-chrome-512x512.png"
+    />
+    <!-- Windows Metro Tiles -->
+    <meta
+      name="msapplication-square70x70logo"
+      content="./img/favicons/mstile-70x70.png"
+    />
+    <meta
+      name="msapplication-square150x150logo"
+      content="./img/favicons/mstile-150x150.png"
+    />
+    <meta
+      name="msapplication-wide310x150logo"
+      content="./img/favicons/mstile-310x150.png"
+    />
+    <meta
+      name="msapplication-square310x310logo"
+      content="./img/favicons/mstile-310x310.png"
+    />
+    <!-- PWA Manifest -->
+    <!-- <link rel="manifest" href="../img/favicons/manifest.webmanifest" /> -->
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-58GPR39B");
+    </script>
+    <!-- End Google Tag Manager -->
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-58GPR39B"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div id="app" v-cloak>
+      <div class="wrapper">
+         <!-- Banner -->
+        <section class="section-banner section">
+          <div class="container flex-center-right">
+            <div class="hero absolute z-10">
+              <picture class="">
+                <img 
+                  class="hero-img sceled"
+                  src="./img/pg-1/hero.png"
+                  alt="Hero"
+                />
+              </picture>
+            </div>
+            <div class="hero-agent absolute">
+              <picture>
+                <img
+                  class="agent floatingX"
+                  src="./img/pg-1/agent.png"
+                  alt="agent"
+                />
+              </picture>
+            </div>
+            <div class="items-wrapper-col gap-xxl">
+              <div class="logo-wrapper flex-center-cetner">
+                <picture>
+                  <img class="logo" src="./img/logo.png" alt="Logo" />
+                </picture>
+              </div>
+              <div
+                class="banner-info flex-col-center"
+                data-aos="zoom-in"
+                data-aos-duration="1200"
+                data-aos-delay="200"
+                data-aos-offset="0"
+              >
+                <h1 class="h1-title pb-xl">
+                 Đăng ký và nhận
+                </h1>
+                <p
+                  class="title-text flex-col-center text-accent title-anim"
+                  data-aos="zoom-in"
+                  data-aos-duration="1500"
+                  data-aos-delay="600"
+                  data-aos-offset="0"
+                  data-aos-easing="linear"
+                >
+                  +100% +150FS
+                </p>
+              </div>
+              <div
+                class="social-list pulseGlow"
+                data-aos="fade-down"
+                data-aos-easing="linear"
+                data-aos-duration="1500"
+                data-aos-delay="1000"
+              >
+              <form class="form tg-list" @submit.prevent="submitForm">
+                <div class="form-group">
+                  <label class="form-label">Nhập tên của bạn</label>
+                  <div class="inpt-group">
+                    <input v-model="name" type="text" class="form-input" placeholder="Nhập tên của bạn" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Nhập địa chỉ email của bạn</label>
+                  <input v-model="email" type="email" class="form-input" placeholder="Nhập email của bạn" />
+                  <div v-if="emailError" class="text-error">{{ emailError }}</div>
+                  <div v-if="successMessage" class="text-success">{{ successMessage }}</div>
+                </div>
+
+                <div class="button-wrapp">
+                  <button type="submit" class="btn btn-gradient-hover mx-auto" :disabled="loading">
+                    {{ loading ? "Đang gửi..." : "Gửi" }}
+                  </button>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Enter code popup -->
+        <div class="code-popup" v-if="showCodePopup" :class="{ 'opacity-1' : showCodePopup, 'opacity-0' : !showCodePopup }">
+          <div class="social-list pulseGlow code-popup-item relative">
+            <div class="form tg-list">
+              <div class="form-group">
+                <label class="form-label"> Nhập mã xác minh </label>
+                <div class="inpt-group">
+                  <input
+                    ref="codeInput"
+                    v-model="code"
+                    @keyup.enter="verifyCode"
+                    type="text"
+                    maxlength="6"
+                    class="form-input"
+                    placeholder="123456"
+                    :disabled="verifying"
+                  />
+                </div>
+                <div v-if="errorMessage" class="text-error">{{ errorMessage }}</div>
+              </div>
+
+              <div class="button-wrapp">
+                <button @click="closeCodePopup" class="btn-close mx-auto">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8m3.59-13L12 10.59L8.41 7L7 8.41L10.59 12L7 15.59L8.41 17L12 13.41L15.59 17L17 15.59L13.41 12L17 8.41z"/>
+                  </svg>
+                </button>
+                <button 
+                  @click="verifyCode" 
+                  class="btn btn-gradient-hover mx-auto"
+                  :disabled="verifying || code.length !== 6"
+                >
+                  {{ verifying ? "Đang kiểm tra..." : "Xác minh" }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Success popup -->
+        <div class="after-poppup-success flex-col-center text-center transition-all popup-wrapper" :class="{ 'opacity-1' : showAfterPopupSuccess, 'opacity-0' : !showAfterPopupSuccess }"  v-if="showAfterPopupSuccess">
+            <h2>🎉 Chúc mừng 🎉</h2>
+            <p>Phần thưởng đã được gửi đến email của bạn</p>
+            <button 
+            @click="closeSuccessPopup" 
+            class="btn-after-popup mt-md" 
+            :disabled="finalizing">{{ finalizing ? "Đang chuyển hướng..." : "Đóng" }}
+            </button>
+        </div>
+
+        <!-- Error popup after verification -->
+        <div class="after-poppup-error flex-col-center text-center transition-all popup-wrapper"  
+            :class="{ 'opacity-1' : showAfterPopupError, 'opacity-0' : !showAfterPopupError }"  
+            v-if="showAfterPopupError">
+            <h2>❌ Thông báo ❌</h2>
+            <p>{{ afterErrorMessage }}</p>
+            <button @click="closeErrorPopup" class="btn-after-popup btn-error mt-md">
+                Đóng
+            </button>
+        </div>
+      </div>
+    </div>
+    </script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/ua-parser-js@1.0.2/dist/ua-parser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script type="text/javascript" src="js/aos.js"></script>
+    <script type="text/javascript" src="js/libs.js"></script>
+    <!-- <script type="module" src="/js/main.js"></script> -->
+    <script type="module" src="./js/src/main.js"></script>
+  </body>
+</html>

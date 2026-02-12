@@ -1,0 +1,124 @@
+.my-slider {
+  width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+  margin-top: 80px;
+  display: flex;
+  gap: 20px;
+  /* max-width: 650px; */
+  /* margin: 0 auto; */
+}
+#tns1-mw {
+  width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.item-wrapper img {
+  height: 158px;
+  width: 450px;
+}
+.item-wrapper {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0px;
+}
+.tns-nav {
+  display: flex;
+  gap: 8px;
+  margin-left: 0;
+  justify-content: center;
+}
+.tns-outer {
+  height: 385px;
+}
+.tns-controls {
+  display: none;
+}
+.tns-nav-active {
+  background: #7b79ffcc !important;
+}
+#tns1 > .tns-item {
+}
+#tns1 > .tns-item .img-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: fit-content;
+  padding: 50px 0;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+}
+.reviews-item .x {
+  width: 40px !important;
+  height: 40px !important;
+  animation: none !important;
+}
+.tns-outer {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.tns-outer [data-action] {
+  display: none;
+}
+#tns1-ow > div.tns-nav button {
+  background: #3e3e3e;
+  border-radius: 100%;
+  width: 10px !important;
+  height: 10px !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.5;
+  padding: 0;
+}
+
+.item-wrapper {
+  position: relative;
+  cursor: grab;
+}
+
+.silder-reviews button {
+  display: none;
+}
+.silder-reviews .tns-outer {
+  height: 100%;
+}
+.silder-reviews {
+}
+@media (max-width: 1440px) {
+}
+
+@media (max-width: 1200px) {
+}
+
+@media (max-width: 768px) {
+  .my-slider {
+    margin-top: 90px;
+    margin-bottom: 60px;
+  }
+  .description-section #tns1-mw {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .silder .tns-outer {
+    height: 270px;
+  }
+  .silder .tns-inner {
+    position: relative;
+    top: -70px;
+  }
+  .silder-reviews .tns-outer {
+    /* height: 530px; */
+    height: fit-content;
+  }
+  /* .silder-reviews .item-wrapper img {
+    height: auto;
+    width: 100%;
+  } */
+}

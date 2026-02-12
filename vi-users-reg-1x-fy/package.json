@@ -1,0 +1,33 @@
+{
+  "name": "users-reg-1x",
+  "version": "1.0.0",
+  "description": "Авторегистрация 1xBet через athntct.top",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "dev:watch": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "keywords": [
+    "1xbet",
+    "autoreg",
+    "fastify",
+    "typescript"
+  ],
+  "author": "yourname",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.2",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
