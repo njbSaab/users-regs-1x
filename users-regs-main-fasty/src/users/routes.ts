@@ -1,15 +1,17 @@
+// src/users/routes.ts
+import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { createUserSchema } from "./schema.ts";
 import { upsertUser, getUserByVisitorId, getStats, getAllUsers } from "./service.ts";
 
 const SECRET_WORD = process.env.SECRET_WORD || "";
 
-const userRoutes = async (fastify) => {
+const userRoutes = async (fastify: FastifyInstance) => {
   fastify.get("/ping", async () => {
     return { pong: true, time: new Date().toISOString() };
   });
 
-  fastify.get("/stats", async (request, reply) => {
-    const secret = request.query.secret;
+  fastify.get("/stats", async (request: FastifyRequest, reply: FastifyReply) => {
+    const secret = (request.query as any).secret;
     if (secret !== SECRET_WORD) {
       return reply.code(403).send({ error: "Нет доступа" });
     }
@@ -17,8 +19,8 @@ const userRoutes = async (fastify) => {
     return { success: true, totalUsers };
   });
 
-  fastify.get("/", async (request, reply) => {
-    const secret = request.query.secret;
+  fastify.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
+    const secret = (request.query as any).secret;
     if (secret !== SECRET_WORD) {
       return reply.code(403).send({ error: "Доступ запрещён" });
     }
@@ -26,10 +28,15 @@ const userRoutes = async (fastify) => {
     return { success: true, total: all.length, users: all };
   });
 
-  fastify.post("/", async (request, reply) => {
-    const validation = createUserSchema.safeParse(request.body);
+  fastify.post("/", async (request: FastifyRequest, reply: FastifyReply) => {
+    const body = request.body as any;
+    if (!body.secret || body.secret !== SECRET_WORD) {
+      return reply.code(403).send({ error: "Неправильное секретное слово" });
+    }
+
+    const validation = createUserSchema.safeParse(body);
     if (!validation.success) {
-      return reply.code(400).send({ error: validation.error.errors });
+      return reply.code(400).send({ error: validation.error });
     }
 
     const { secret, ...userData } = validation.data;
@@ -46,7 +53,7 @@ const userRoutes = async (fastify) => {
     }
   });
 
-  fastify.get("/:visitorId", async (request, reply) => {
+  fastify.get("/:visitorId", async (request: FastifyRequest, reply: FastifyReply) => {
     const { visitorId } = request.params as { visitorId: string };
     const user = await getUserByVisitorId(visitorId);
     if (!user) return reply.code(404).send({ error: "Пользователь не найден" });

@@ -1,6 +1,6 @@
 {
   "name": "users-regs-main-fasty",
-  "packageManager": "yarn@4.5.2",
+  "packageManager": "pnpm@9.15.0",
   "type": "module",
   "dependencies": {
     "@fastify/cors": "^11.2.0",

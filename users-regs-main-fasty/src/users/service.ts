@@ -1,4 +1,6 @@
-import { db } from "../db";
+// src/users/service.ts
+import { db } from "../db/index.ts";
+import { users } from "../db/schema.ts";
 import { eq, sql } from "drizzle-orm";
 import type { CreateUserInput } from "./types.ts";
 
@@ -26,26 +28,29 @@ export async function upsertUser(data: CreateUserInput) {
     })
     .returning();
 
-  const user = result[0]!;
-
-  console.log(`Пользователь ${user.email ? 'обновлён' : 'создан'} | ${user.email} | ${user.name} | ${user.visitorId}`);
+  const user = result[0];
+  if (!user) {
+    throw new Error("upsertUser: не вернулась запись после INSERT/UPDATE");
+  }
 
   const isCreated = user.createdAt.getTime() === user.updatedAt.getTime();
 
+  console.log(`Пользователь ${isCreated ? 'создан' : 'обновлён'} | ${user.email} | ${user.name} | ${user.visitorId}`);
+
   return {
-    action: isCreated ? "created" : "updated",
+    action: isCreated ? ("created" as const) : ("updated" as const),
     user,
   };
 }
 
 export async function getUserByVisitorId(visitorId: string) {
-  const [user] = await db.select().from(users).where(eq(users.visitorId, visitorId)).limit(1);
-  return user ?? null;
+  const result = await db.select().from(users).where(eq(users.visitorId, visitorId)).limit(1);
+  return result[0] ?? null;
 }
 
 export async function getStats() {
   const result = await db.select({ count: sql<number>`count(*)` }).from(users);
-  return Number(result[0].count);
+  return Number(result[0]?.count ?? 0);
 }
 
 export async function getAllUsers() {

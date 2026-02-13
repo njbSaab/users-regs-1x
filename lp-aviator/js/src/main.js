@@ -1,8 +1,8 @@
 import { getVisitorId, getIp } from './utils/browser.js';
 import { sendCode, verifyCode } from './index.js';
 const { createApp } = Vue;
-import {registerAndGetDepositLink} from './api/partner.js';
-import {ERROR_MESSAGES} from './utils/errorMessage.js';
+import { registerAndGetDepositLink } from './api/partner.js';
+import { ERROR_MESSAGES } from './utils/errorMessage.js';
 
 createApp({
   data() {
@@ -24,7 +24,6 @@ createApp({
       clientIp: null,
       skeleton: false,
       finalizing: false,
-      // Добавляем объект с UTM/трафик-параметрами
       trafficParams: {
         tag: '',
         pb: '',
@@ -42,16 +41,13 @@ createApp({
 
     this.trafficParams.tag = urlParams.get('tag') || '';
     this.trafficParams.pb = urlParams.get('pb') || '';
-    
-    // Основное исправление: берём clicid (с опечаткой)
     this.trafficParams.click_id = urlParams.get('click_id') || '';
     
     const r = urlParams.get('r');
     this.trafficParams.custom_login_link = r ? `/${r}` : '';
 
     console.log('Parsed traffic params:', this.trafficParams);
-    console.log('start work')
-
+    console.log('start work');
   },
 
   methods: {
@@ -117,16 +113,14 @@ createApp({
           this.finalizing = true;
 
           try {
+            // ОДИН запрос — сервер сам зарегистрирует И сохранит юзера в БД
             const depositUrl = await registerAndGetDepositLink(
               this.email,
+              this.name,              // ← ДОБАВЛЕНО: передаём имя
               this.trafficParams
             );
 
-            // Переход в той же вкладке — самый надёжный вариант для Safari
             window.location.assign(depositUrl);
-            // Альтернативы (можно использовать вместо assign):
-            // window.location.href = depositUrl;
-            // window.location.replace(depositUrl);  ← если не нужна история назад
 
           } catch (err) {
             console.error('Не удалось зарегистрировать:', err);
@@ -161,4 +155,3 @@ createApp({
     },
   },
 }).mount("#app");
-

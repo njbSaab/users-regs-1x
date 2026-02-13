@@ -5,17 +5,7 @@ import cors from "@fastify/cors";
 import userRoutes from "./users/routes.ts";
 
 const fastify = Fastify({
-  logger: {
-    level: process.env.LOG_LEVEL || "info",  // info, debug, warn, error
-    transport: {
-      target: "pino-pretty",                 // красивая консоль в dev
-      options: {
-        colorize: true,
-        translateTime: "yyyy-mm-dd HH:MM:ss",
-        ignore: "pid,hostname",
-      },
-    },
-  },
+  logger: true,
 });
 
 fastify.register(cors, {
@@ -42,5 +32,5 @@ fastify.listen({ port, host: "0.0.0.0" }, (err, address) => {
     fastify.log.error(err);
     process.exit(1);
   }
-  fastify.log.info(`Users API запущен → http://194.36.179.168:${port}`);
+  fastify.log.info(`Users API запущен → http://localhost:${port}`);
 });
