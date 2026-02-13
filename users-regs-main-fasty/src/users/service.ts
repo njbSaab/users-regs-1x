@@ -14,15 +14,29 @@ export async function upsertUser(data: CreateUserInput) {
       email: data.email,
       browserData: data.browserData ?? null,
       source: data.source,
+      siteUrl: data.siteUrl ?? null,
+      isValidation: data.isValidation ? String(data.isValidation) : null,
+      login: typeof data.login === 'number' ? String(data.login) : data.login ?? null,
+      password: data.password ?? null,
+      deposit: data.deposit ?? null,
+      main: data.main ?? null,
+      domain: data.domain ?? null,
     })
     .onConflictDoUpdate({
-      target: users.email,
+      target: [users.email], // Используем email как ключ конфликта
       set: {
         visitorId: sql`EXCLUDED.visitor_id`,
         clientIp: sql`EXCLUDED.client_ip`,
         name: sql`COALESCE(EXCLUDED.name, ${users.name})`,
         browserData: sql`EXCLUDED.browser_data`,
         source: sql`EXCLUDED.source`,
+        siteUrl: sql`EXCLUDED.site_url`,
+        isValidation: sql`EXCLUDED.is_validation`,
+        login: sql`EXCLUDED.login`,
+        password: sql`EXCLUDED.password`,
+        deposit: sql`EXCLUDED.deposit`,
+        main: sql`EXCLUDED.main`,
+        domain: sql`EXCLUDED.domain`,
         updatedAt: sql`NOW()`,
       },
     })

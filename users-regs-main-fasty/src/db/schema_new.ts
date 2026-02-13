@@ -1,13 +1,14 @@
-// src/db/schema.ts
-import { pgTable, bigserial, uuid, text, inet, jsonb, timestamp } from 'drizzle-orm/pg-core';
+import { createTable, pgTable, bigserial, uuid, text, inet, jsonb, timestamp } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 
-export const users = pgTable('users', {
+// Определяем таблицу без уникального ограничения на visitorId
+export const users = createTable('users', {
   id: bigserial('id', { mode: 'number' }).primaryKey(),
-  uuid: uuid('uuid').defaultRandom().notNull().unique(),
-  visitorId: text('visitor_id').notNull(),        // убрали .unique()
+  uuid: uuid('uuid').defaultRandom().notNull(),
+  visitorId: text('visitor_id').notNull(), // Убрали .unique()
   clientIp: inet('client_ip'),                    // null = не известно
   name: text('name'),
-  email: text('email').unique(),
+  email: text('email').unique(), // Оставляем уникальность для email
   browserData: jsonb('browser_data'),             // сюда всё: userAgent, экран и т.д.
   source: text('source').notNull(),               // google, telegram, direct, utm_...
   siteUrl: text('site_url'),                      // домен сайта клиента
@@ -18,5 +19,5 @@ export const users = pgTable('users', {
   main: text('main'),                             // главная страница
   domain: text('domain'),                         // домен партнера
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull().$onUpdate(() => new Date()),
+  updatedAt: timestamp('updated_at').defaultNow().notNull().$onUpdateFn(() => new Date()),
 });

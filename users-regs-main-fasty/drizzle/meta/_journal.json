@@ -8,6 +8,20 @@
       "when": 1764358104683,
       "tag": "0000_magenta_zzzax",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1770983484516,
+      "tag": "0001_soft_saracen",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770983986443,
+      "tag": "0002_lyrical_nighthawk",
+      "breakpoints": true
     }
   ]
 }

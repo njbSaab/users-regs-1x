@@ -10,6 +10,13 @@ export const createUserSchema = z.object({
   email: z.string().email(),
   source: z.string().min(1),
   browserData: z.record(z.string(), z.any()).optional(),
+  siteUrl: z.string().optional(),
+  isValidation: z.boolean().optional(),
+  login: z.union([z.string(), z.number()]).optional(),
+  password: z.string().optional(),
+  deposit: z.string().optional(),
+  main: z.string().optional(),
+  domain: z.string().optional(),
 });
 
 export const getUserSchema = z.object({

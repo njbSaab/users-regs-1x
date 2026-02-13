@@ -1,0 +1,1 @@
+ALTER TABLE "users" DROP CONSTRAINT "users_visitor_id_unique";

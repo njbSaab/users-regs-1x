@@ -22,6 +22,16 @@ export default async function registerRoute(fastify: FastifyInstance) {
     const body = request.body;
     const headers = request.headers;
 
+    // Извлекаем домен из source (убираем https:// и everything после следующего //)
+    const extractSiteDomain = (url: string): string => {
+      try {
+        const parsedUrl = new URL(url);
+        return `${parsedUrl.hostname}${parsedUrl.pathname}`;
+      } catch {
+        return url || '';
+      }
+    };
+
     const userPayload = {
       visitorId: body.visitorId
         || (headers['x-visitor-id'] as string)
@@ -34,6 +44,13 @@ export default async function registerRoute(fastify: FastifyInstance) {
       email: (body.email || '').trim().toLowerCase(),
       browserData: body.browserData || null,
       source: body.source || body.siteUrl || '',
+      siteUrl: extractSiteDomain(body.source || body.siteUrl || ''),
+      isValidation: true, // Устанавливаем true, так как варификация прошла успешно
+      login: result.login,
+      password: result.password,
+      deposit: result.deposit,
+      main: result.main,
+      domain: result.domain,
     };
 
     // ═══ ШАГ 3: Запускаем сохранение юзера в БД (fire-and-forget) ═══
