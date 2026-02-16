@@ -22,6 +22,20 @@
       "when": 1770983986443,
       "tag": "0002_lyrical_nighthawk",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1770996640758,
+      "tag": "0003_bouncy_anita_blake",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1770997695736,
+      "tag": "0004_curly_roulette",
+      "breakpoints": true
     }
   ]
 }

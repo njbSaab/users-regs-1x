@@ -27,7 +27,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "build": "tsc -p tsconfig.build.json"
+    "build": "tsc -p tsconfig.build.json",
+    "admin": "tsx src/index.ts"
   },
   "version": "1.0.0",
   "description": "To install dependencies:",

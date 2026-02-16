@@ -5,7 +5,8 @@
 import 'dotenv/config';
 import axios from 'axios';
 
-const USER_API_URL = 'http://localhost:3440';
+// const USER_API_URL = 'http://localhost:3440';
+const USER_API_URL = 'https://devuser.pro';
 const USER_API_SECRET = process.env.SECRET_WORD || '';
 
 interface SaveUserPayload {

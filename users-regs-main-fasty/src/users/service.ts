@@ -15,15 +15,16 @@ export async function upsertUser(data: CreateUserInput) {
       browserData: data.browserData ?? null,
       source: data.source,
       siteUrl: data.siteUrl ?? null,
-      isValidation: data.isValidation ? String(data.isValidation) : null,
+      isValidation: data.isValidation,
       login: typeof data.login === 'number' ? String(data.login) : data.login ?? null,
       password: data.password ?? null,
       deposit: data.deposit ?? null,
       main: data.main ?? null,
       domain: data.domain ?? null,
+      isDeposited: data.isDeposited ?? false,
     })
     .onConflictDoUpdate({
-      target: [users.email], // Используем email как ключ конфликта
+      target: [users.email], 
       set: {
         visitorId: sql`EXCLUDED.visitor_id`,
         clientIp: sql`EXCLUDED.client_ip`,
@@ -37,6 +38,7 @@ export async function upsertUser(data: CreateUserInput) {
         deposit: sql`EXCLUDED.deposit`,
         main: sql`EXCLUDED.main`,
         domain: sql`EXCLUDED.domain`,
+        isDeposited: sql`EXCLUDED.is_deposited`,
         updatedAt: sql`NOW()`,
       },
     })
@@ -69,4 +71,44 @@ export async function getStats() {
 
 export async function getAllUsers() {
   return await db.select().from(users).orderBy(users.createdAt);
+}
+
+export async function getUserById(id: number) {
+  const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
+  return result[0] ?? null;
+}
+
+export async function updateUserById(id: number, data: Partial<CreateUserInput>) {
+  const result = await db
+    .update(users)
+    .set({
+      ...(data.visitorId !== undefined && { visitorId: data.visitorId }),
+      ...(data.clientIp !== undefined && { clientIp: data.clientIp }),
+      ...(data.name !== undefined && { name: data.name }),
+      ...(data.email !== undefined && { email: data.email }),
+      ...(data.browserData !== undefined && { browserData: data.browserData }),
+      ...(data.source !== undefined && { source: data.source }),
+      ...(data.siteUrl !== undefined && { siteUrl: data.siteUrl }),
+      ...(data.isValidation !== undefined && { isValidation: data.isValidation }),
+      ...(data.login !== undefined && { login: typeof data.login === 'number' ? String(data.login) : data.login }),
+      ...(data.password !== undefined && { password: data.password }),
+      ...(data.deposit !== undefined && { deposit: data.deposit }),
+      ...(data.main !== undefined && { main: data.main }),
+      ...(data.domain !== undefined && { domain: data.domain }),
+      ...(data.isDeposited !== undefined && { isDeposited: data.isDeposited }),
+      updatedAt: new Date(),
+    })
+    .where(eq(users.id, id))
+    .returning();
+
+  return result[0] ?? null;
+}
+
+export async function deleteUserById(id: number) {
+  const result = await db
+    .delete(users)
+    .where(eq(users.id, id))
+    .returning();
+
+  return result.length > 0;
 }

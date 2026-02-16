@@ -1,7 +1,7 @@
 // src/users/routes.ts
 import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import { createUserSchema } from "./schema.ts";
-import { upsertUser, getUserByVisitorId, getStats, getAllUsers } from "./service.ts";
+import { upsertUser, getUserByVisitorId, getStats, getAllUsers, getUserById, updateUserById, deleteUserById } from "./service.ts";
 
 const SECRET_WORD = process.env.SECRET_WORD || "";
 
@@ -11,7 +11,7 @@ const userRoutes = async (fastify: FastifyInstance) => {
   });
 
   fastify.get("/stats", async (request: FastifyRequest, reply: FastifyReply) => {
-    const secret = (request.query as any).secret;
+    const secret = (request.headers as any)["x-secret-word"] || (request.headers as any)["X-Secret-Word"];
     if (secret !== SECRET_WORD) {
       return reply.code(403).send({ error: "Нет доступа" });
     }
@@ -20,7 +20,7 @@ const userRoutes = async (fastify: FastifyInstance) => {
   });
 
   fastify.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
-    const secret = (request.query as any).secret;
+    const secret = (request.headers as any)["x-secret-word"] || (request.headers as any)["X-Secret-Word"];
     if (secret !== SECRET_WORD) {
       return reply.code(403).send({ error: "Доступ запрещён" });
     }
@@ -58,6 +58,89 @@ const userRoutes = async (fastify: FastifyInstance) => {
     const user = await getUserByVisitorId(visitorId);
     if (!user) return reply.code(404).send({ error: "Пользователь не найден" });
     return { success: true, user };
+  });
+
+  // Получить пользователя по ID (требует секретное слово в заголовке)
+  fastify.get("/by-id/:id", async (request: FastifyRequest, reply: FastifyReply) => {
+    const id = parseInt(request.params["id"] as string, 10);
+    const secret = (request.headers as any)["x-secret-word"] || (request.headers as any)["X-Secret-Word"];
+    const SECRET_WORD = process.env.SECRET_WORD || "";
+    
+    if (secret !== SECRET_WORD) {
+      return reply.code(403).send({ error: "Доступ запрещён" });
+    }
+    
+    if (isNaN(id)) {
+      return reply.code(400).send({ error: "Неверный ID пользователя" });
+    }
+    
+    const user = await getUserById(id);
+    if (!user) return reply.code(404).send({ error: "Пользователь не найден" });
+    return { success: true, user };
+  });
+
+  // Обновить пользователя по ID (требует секретное слово в заголовке)
+  fastify.put("/:id", async (request: FastifyRequest, reply: FastifyReply) => {
+    const id = parseInt(request.params["id"] as string, 10);
+    const secret = (request.headers as any)["x-secret-word"] || (request.headers as any)["X-Secret-Word"];
+    const SECRET_WORD = process.env.SECRET_WORD || "";
+    
+    if (secret !== SECRET_WORD) {
+      return reply.code(403).send({ error: "Доступ запрещён" });
+    }
+    
+    if (isNaN(id)) {
+      return reply.code(400).send({ error: "Неверный ID пользователя" });
+    }
+    
+    const validation = createUserSchema.partial().safeParse(request.body);
+    if (!validation.success) {
+      return reply.code(400).send({ error: validation.error });
+    }
+
+    try {
+      const result = await updateUserById(id, validation.data);
+      if (!result) {
+        return reply.code(404).send({ error: "Пользователь не найден" });
+      }
+      return reply.code(200).send({
+        success: true,
+        action: "updated",
+        user: result,
+      });
+    } catch (err: any) {
+      fastify.log.error({ err }, "Ошибка обновления пользователя");
+      return reply.code(500).send({ error: "Не удалось обновить пользователя" });
+    }
+  });
+
+  // Удалить пользователя по ID (требует секретное слово в заголовке)
+  fastify.delete("/:id", async (request: FastifyRequest, reply: FastifyReply) => {
+    const id = parseInt(request.params["id"] as string, 10);
+    const secret = (request.headers as any)["x-secret-word"] || (request.headers as any)["X-Secret-Word"];
+    const SECRET_WORD = process.env.SECRET_WORD || "";
+    
+    if (secret !== SECRET_WORD) {
+      return reply.code(403).send({ error: "Доступ запрещён" });
+    }
+    
+    if (isNaN(id)) {
+      return reply.code(400).send({ error: "Неверный ID пользователя" });
+    }
+    
+    try {
+      const deleted = await deleteUserById(id);
+      if (!deleted) {
+        return reply.code(404).send({ error: "Пользователь не найден" });
+      }
+      return reply.code(200).send({
+        success: true,
+        message: "Пользователь успешно удален",
+      });
+    } catch (err: any) {
+      fastify.log.error({ err }, "Ошибка удаления пользователя");
+      return reply.code(500).send({ error: "Не удалось удалить пользователя" });
+    }
   });
 };
 

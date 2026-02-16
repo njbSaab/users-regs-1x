@@ -81,12 +81,11 @@ export const registerUser = async (
   console.log('Payload:', payload);
 
   try {
-    // АКСИОС САМ ХОДИТ ЗА ВСЕМИ РЕДИРЕКТАМИ И НЕ ПАДАЕТ
     const res = await axios.post(config.partner.apiUrl, payload, {
       headers: outgoingHeaders,
-      maxRedirects: 20,           // на всякий случай
+      maxRedirects: 20,          
       timeout: 15000,
-      validateStatus: () => true, // не падаем на 301/302/404
+      validateStatus: () => true, 
     });
 
     const data = res.data;

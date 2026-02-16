@@ -17,7 +17,10 @@ export const createUserSchema = z.object({
   deposit: z.string().optional(),
   main: z.string().optional(),
   domain: z.string().optional(),
+  isDeposited: z.boolean().optional().default(false),
 });
+
+export const updateUserSchema = createUserSchema.partial().omit({ secret: true });
 
 export const getUserSchema = z.object({
   secret: z.string(),

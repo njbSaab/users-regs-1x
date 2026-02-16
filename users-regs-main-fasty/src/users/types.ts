@@ -13,7 +13,10 @@ export type CreateUserInput = {
   deposit?: string;
   main?: string;
   domain?: string;
+  isDeposited?: boolean; // по умолчанию false
 };
+
+export type UpdateUserInput = Partial<CreateUserInput>;
 
 export type GetUserInput = {
   visitorId: string;
